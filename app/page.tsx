@@ -25,13 +25,23 @@ export default function Home() {
   return (
     <main id="main-content">
       <section className="relative flex min-h-[min(900px,100svh)] overflow-hidden bg-[var(--wine)] pt-[4.75rem] text-[var(--mist)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_30%,rgba(229,209,210,0.3),transparent_29%),radial-gradient(circle_at_18%_84%,rgba(183,157,120,0.18),transparent_34%),linear-gradient(125deg,#4a2931_12%,#6e454d_54%,#302421)]" />
-        <div className="ribbon-drift absolute -right-20 top-[16%] h-[68%] w-[48%] rotate-[-7deg] rounded-[50%_20%_50%_25%] border border-white/15 bg-gradient-to-br from-white/22 via-[var(--blush)]/8 to-transparent blur-[1px]" />
-        <div className="absolute -left-24 bottom-[-22%] size-[34rem] rounded-full border border-[var(--champagne)]/20" />
-        <FloralMark className="bottom-[-5rem] right-[5%] opacity-40" />
+        <video
+          className="hero-video absolute inset-0 size-full object-cover object-center"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/flowers-hero-poster.jpg"
+          aria-hidden="true"
+        >
+          <source src="/flowers-hero-4k.mp4" type="video/mp4" />
+        </video>
+        <div className="hero-video-overlay absolute inset-0" />
+        <div className="absolute -left-24 bottom-[-22%] size-[34rem] rounded-full border border-[var(--champagne)]/20 opacity-55" />
 
         <div className="container-shell relative z-10 grid flex-1 items-end gap-10 pb-12 pt-16 lg:grid-cols-[1fr_0.4fr] lg:pb-16">
-          <div className="animate-reveal max-w-5xl">
+          <div className="hero-copy-highlight animate-reveal max-w-5xl">
             <p className="eyebrow text-[var(--champagne)]">
               Bespoke event styling · Kuala Lumpur
             </p>

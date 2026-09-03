@@ -28,3 +28,19 @@ test('homepage has no automatically detectable serious accessibility issues', as
     ),
   ).toEqual([]);
 });
+
+test('hero background loads the 4K video asset', async ({ page }) => {
+  await page.goto('/');
+  const video = page.locator('video.hero-video');
+
+  await expect(video).toHaveAttribute('autoplay', '');
+  await expect
+    .poll(() =>
+      video.evaluate((element: HTMLVideoElement) => ({
+        width: element.videoWidth,
+        height: element.videoHeight,
+        muted: element.muted,
+      })),
+    )
+    .toEqual({ width: 3840, height: 2160, muted: true });
+});
