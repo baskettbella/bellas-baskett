@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build",
+    "export:standalone": "npm run build && node tools/export-standalone.mjs",
     "start": "wrangler dev --config dist/server/wrangler.json",
     "test": "vitest",
     "test:run": "vitest run",
