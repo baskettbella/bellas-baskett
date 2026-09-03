@@ -125,6 +125,22 @@
     margin-inline: auto;
   }
 
+  .brand-logo-link {
+    display: block;
+    width: clamp(8.75rem, 23vw, 10.75rem);
+    aspect-ratio: 3.15 / 1;
+    flex: none;
+    overflow: hidden;
+  }
+
+  .brand-logo-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: translateY(-33.5%);
+    mix-blend-mode: multiply;
+  }
+
   .eyebrow {
     font-size: 0.69rem;
     font-weight: 700;

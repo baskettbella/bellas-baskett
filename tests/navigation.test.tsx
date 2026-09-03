@@ -1,10 +1,21 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
 import { SiteHeader } from '@/components/brand/site-header';
 
 describe('SiteHeader', () => {
+  it("uses the official Bella's Baskett logo as the home link", () => {
+    render(<SiteHeader />);
+
+    const homeLink = screen.getByRole('link', {
+      name: "Bella's Baskett home",
+    });
+    expect(
+      within(homeLink).getByRole('img', { name: "Bella's Baskett" }),
+    ).toHaveAttribute('src', '/bellas-baskett-logo.jpg');
+  });
+
   it('keeps the event-planning path available', () => {
     render(<SiteHeader />);
     expect(

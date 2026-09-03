@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -30,10 +31,16 @@ export function SiteHeader() {
       <div className="container-shell flex h-[4.75rem] items-center justify-between gap-5">
         <Link
           href="/"
-          className="font-display text-[1.35rem] font-semibold tracking-[0.02em] text-[var(--wine)] sm:text-[1.55rem]"
+          className="brand-logo-link"
           aria-label="Bella's Baskett home"
         >
-          Bella&apos;s Baskett
+          <Image
+            src="/bellas-baskett-logo.jpg"
+            width={554}
+            height={554}
+            alt="Bella's Baskett"
+            className="brand-logo-image"
+          />
         </Link>
 
         <nav
