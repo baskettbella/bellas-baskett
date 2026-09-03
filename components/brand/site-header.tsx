@@ -33,9 +33,9 @@ export function SiteHeader() {
           className="brand-logo-link"
           aria-label="Bella's Baskett home"
         >
-          {/* oxlint-disable-next-line next/no-img-element -- A fixed 7.6KB local logo avoids the Vinext client-image hydration conflict. */}
+          {/* oxlint-disable-next-line next/no-img-element -- The local transparent logo avoids the Vinext client-image hydration conflict. */}
           <img
-            src="/bellas-baskett-logo.jpg"
+            src="/bellas-baskett-logo-transparent.png"
             width={554}
             height={554}
             alt="Bella's Baskett"

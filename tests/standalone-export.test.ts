@@ -28,6 +28,7 @@ describe('standalone website export', () => {
     const html = readFileSync(outputPath, 'utf8');
 
     expect(html).toContain('<title>Bella&#x27;s Baskett');
+    expect(html).toContain('data:image/png;base64,');
     expect(html).toContain('data:image/jpeg;base64,');
     expect(html).toContain('data:video/mp4;base64,');
     expect(html).toContain('<style id="compiled-site-styles">');

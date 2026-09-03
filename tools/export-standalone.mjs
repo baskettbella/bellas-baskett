@@ -12,6 +12,7 @@ const outputPath = resolve(
 const mimeTypes = {
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
   '.mp4': 'video/mp4',
   '.svg': 'image/svg+xml',
 };
@@ -44,7 +45,9 @@ async function readCompiledCss() {
   }
 
   return (
-    await Promise.all(cssFiles.map((name) => readFile(join(cssDirectory, name), 'utf8')))
+    await Promise.all(
+      cssFiles.map((name) => readFile(join(cssDirectory, name), 'utf8')),
+    )
   ).join('\n');
 }
 
@@ -217,7 +220,9 @@ const portableScript = String.raw`<script>
 
 async function buildStandaloneHtml() {
   const serverEntry = join(projectRoot, 'dist', 'server', 'index.js');
-  const workerModule = await import(`${pathToFileURL(serverEntry).href}?standalone`);
+  const workerModule = await import(
+    `${pathToFileURL(serverEntry).href}?standalone`
+  );
   const response = await workerModule.default.fetch(
     new Request('http://standalone.local/'),
     {},
@@ -230,7 +235,9 @@ async function buildStandaloneHtml() {
 
   const [compiledCss, logo, video, poster, favicon] = await Promise.all([
     readCompiledCss(),
-    toDataUri(join(projectRoot, 'public', 'bellas-baskett-logo.jpg')),
+    toDataUri(
+      join(projectRoot, 'public', 'bellas-baskett-logo-transparent.png'),
+    ),
     toDataUri(join(projectRoot, 'public', 'flowers-hero-4k.mp4')),
     toDataUri(join(projectRoot, 'public', 'flowers-hero-poster.jpg')),
     toDataUri(join(projectRoot, 'public', 'favicon.svg')),
@@ -243,7 +250,7 @@ async function buildStandaloneHtml() {
     `<style id="compiled-site-styles">${compiledCss}</style>`,
   );
   html = html.replace(/<link\b(?=[^>]*href="\/_next\/)[^>]*>/gi, '');
-  html = html.replaceAll('/bellas-baskett-logo.jpg', logo);
+  html = html.replaceAll('/bellas-baskett-logo-transparent.png', logo);
   html = html.replaceAll('/flowers-hero-4k.mp4', video);
   html = html.replaceAll('/flowers-hero-poster.jpg', poster);
   html = html.replaceAll('/favicon.svg', favicon);
@@ -257,7 +264,16 @@ async function buildStandaloneHtml() {
   return html;
 }
 
-const standaloneHtml = await buildStandaloneHtml();
-await mkdir(dirname(outputPath), { recursive: true });
-await writeFile(outputPath, standaloneHtml, 'utf8');
-console.log(`Standalone website created: ${outputPath}`);
+const vercelOutputPath = resolve(projectRoot, 'vercel-output', 'index.html');
+
+// The connected Vercel project invokes this legacy command. Preserve the
+// downloadable single-file default while emitting the route-capable build there.
+if (outputPath === vercelOutputPath) {
+  const { exportStaticSite } = await import('./export-static-site.mjs');
+  await exportStaticSite(dirname(outputPath));
+} else {
+  const standaloneHtml = await buildStandaloneHtml();
+  await mkdir(dirname(outputPath), { recursive: true });
+  await writeFile(outputPath, standaloneHtml, 'utf8');
+  console.log(`Standalone website created: ${outputPath}`);
+}

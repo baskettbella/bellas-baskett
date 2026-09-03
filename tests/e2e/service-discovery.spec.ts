@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 test('visitor can discover a service and begin planning', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'View all services' }).click();
-  await expect(page).toHaveURL(/\/services$/);
+  await expect(page).toHaveURL(/\/services\/?$/);
 
   await page.locator('a[href="/services/intimate-celebrations"]').click();
   await expect(

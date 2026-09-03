@@ -13,7 +13,7 @@ describe('SiteHeader', () => {
     });
     expect(
       within(homeLink).getByRole('img', { name: "Bella's Baskett" }),
-    ).toHaveAttribute('src', '/bellas-baskett-logo.jpg');
+    ).toHaveAttribute('src', '/bellas-baskett-logo-transparent.png');
   });
 
   it('keeps the event-planning path available', () => {
