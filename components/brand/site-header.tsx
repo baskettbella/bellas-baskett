@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -34,7 +33,8 @@ export function SiteHeader() {
           className="brand-logo-link"
           aria-label="Bella's Baskett home"
         >
-          <Image
+          {/* oxlint-disable-next-line next/no-img-element -- A fixed 7.6KB local logo avoids the Vinext client-image hydration conflict. */}
+          <img
             src="/bellas-baskett-logo.jpg"
             width={554}
             height={554}
