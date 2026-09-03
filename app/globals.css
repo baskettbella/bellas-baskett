@@ -262,6 +262,318 @@
     );
     filter: blur(10px);
   }
+
+  .home-viewport-flow {
+    overflow-x: clip;
+  }
+
+  .viewport-panel {
+    display: flex;
+    height: 100svh;
+    min-height: 0;
+    overflow: clip;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+
+  .viewport-panel-shell {
+    height: 100%;
+    min-height: 0;
+    align-content: center;
+    padding-top: calc(4.75rem + clamp(0.75rem, 3svh, 3rem));
+    padding-bottom: max(
+      clamp(1rem, 3.5svh, 3.5rem),
+      env(safe-area-inset-bottom)
+    );
+  }
+
+  .hero-panel-shell {
+    height: 100%;
+    min-height: 0;
+    padding-top: calc(
+      4.75rem + max(clamp(0.75rem, 3svh, 2.5rem), env(safe-area-inset-top))
+    );
+    padding-bottom: max(clamp(1rem, 4svh, 4rem), env(safe-area-inset-bottom));
+  }
+
+  .hero-title {
+    margin-top: clamp(0.65rem, 2svh, 1.25rem);
+    font-size: clamp(3rem, min(11.5vw, 17svh), 10.5rem);
+    line-height: 0.76;
+  }
+
+  .hero-title span {
+    margin-top: clamp(0.4rem, 1.4svh, 1rem);
+  }
+
+  .hero-description {
+    margin-top: clamp(0.9rem, 2.8svh, 2.25rem);
+    line-height: clamp(1.3rem, 2.8svh, 1.75rem);
+  }
+
+  .hero-actions {
+    margin-top: clamp(0.8rem, 2.5svh, 2rem);
+  }
+
+  .intro-panel-grid {
+    gap: clamp(0.75rem, 4svh, 5rem);
+  }
+
+  .intro-panel-title {
+    font-size: clamp(2.25rem, min(6.6vw, 8.5svh), 6.4rem);
+    line-height: 0.9;
+  }
+
+  .intro-panel-copy {
+    gap: clamp(0.5rem, 2vw, 2rem);
+    margin-top: clamp(0.8rem, 2.5svh, 2.5rem);
+    line-height: clamp(1.25rem, 2.7svh, 1.75rem);
+  }
+
+  .intro-panel-link {
+    margin-top: clamp(0.6rem, 2svh, 2.25rem);
+  }
+
+  .services-panel-shell,
+  .portfolio-panel-shell,
+  .process-panel-shell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .services-panel-shell h2,
+  .portfolio-panel-shell h2,
+  .process-panel-shell h2 {
+    font-size: clamp(2.35rem, min(6vw, 8svh), 5.8rem);
+  }
+
+  .services-panel-shell > div:first-child > p:last-child,
+  .portfolio-panel-shell > div:first-child > div:first-child > p:last-child {
+    margin-top: clamp(0.65rem, 2svh, 1.5rem);
+    line-height: clamp(1.25rem, 2.7svh, 1.75rem);
+  }
+
+  .services-panel-grid {
+    display: grid;
+    grid-auto-columns: min(82vw, 19rem);
+    grid-auto-flow: column;
+    height: clamp(11.5rem, 31svh, 22rem);
+    margin-top: clamp(0.75rem, 2.8svh, 4rem);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .service-panel-card {
+    display: flex;
+    scroll-snap-align: start;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid var(--border);
+    padding: clamp(0.8rem, 2.4svh, 1.75rem);
+  }
+
+  .service-card-copy h3 {
+    font-size: clamp(1.75rem, min(7.5vw, 4.7svh), 2.6rem);
+  }
+
+  .service-card-description {
+    display: -webkit-box;
+    margin-top: clamp(0.4rem, 1.3svh, 1.25rem);
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.35rem;
+  }
+
+  .service-card-link {
+    margin-top: clamp(0.35rem, 1svh, 1.5rem);
+  }
+
+  .services-panel-action {
+    margin-top: clamp(0.65rem, 2svh, 2.5rem);
+  }
+
+  .portfolio-panel-shell > .grid:first-child {
+    gap: clamp(0.55rem, 2svh, 2rem);
+  }
+
+  .portfolio-panel-grid {
+    min-height: 0;
+    gap: clamp(0.5rem, 1.4svh, 1.25rem);
+    margin-top: clamp(0.65rem, 2.2svh, 3.5rem);
+  }
+
+  .portfolio-feature {
+    height: clamp(12.5rem, 31svh, 30rem);
+    padding: clamp(0.9rem, 3svh, 3rem);
+  }
+
+  .portfolio-feature-title {
+    font-size: clamp(2rem, min(6vw, 6.5svh), 4.5rem);
+  }
+
+  .portfolio-feature p:last-child {
+    display: -webkit-box;
+    margin-top: clamp(0.35rem, 1svh, 1.25rem);
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.3rem;
+  }
+
+  .portfolio-support-grid {
+    display: none;
+    gap: clamp(0.5rem, 1.4svh, 1.25rem);
+  }
+
+  .portfolio-support-card {
+    min-height: 0;
+    padding: clamp(0.85rem, 2svh, 1.75rem);
+  }
+
+  .process-panel-grid {
+    gap: clamp(0.55rem, 2svh, 2.5rem);
+    margin-top: clamp(0.9rem, 3svh, 4rem);
+    padding-top: clamp(0.75rem, 2.5svh, 2.5rem);
+  }
+
+  .process-panel-grid li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  .process-panel-grid li > span {
+    grid-row: 1 / 3;
+  }
+
+  .process-step-title {
+    font-size: clamp(1.65rem, min(7vw, 4.8svh), 2.5rem);
+    line-height: 1;
+  }
+
+  .process-step-copy {
+    display: -webkit-box;
+    margin-top: clamp(0.25rem, 0.8svh, 1rem);
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.3rem;
+  }
+
+  .process-panel-link {
+    align-self: flex-start;
+    margin-top: clamp(0.75rem, 2.5svh, 3rem);
+  }
+
+  .corporate-panel-grid {
+    gap: clamp(0.75rem, 3svh, 3.5rem);
+  }
+
+  .corporate-art {
+    height: clamp(8.5rem, 22svh, 28rem);
+    padding: clamp(0.9rem, 2.7svh, 2.25rem);
+  }
+
+  .corporate-art-title {
+    font-size: clamp(2rem, min(8vw, 6svh), 3rem);
+  }
+
+  .corporate-panel-title {
+    margin-top: clamp(0.55rem, 1.6svh, 1.25rem);
+    font-size: clamp(2.4rem, min(6vw, 8svh), 6rem);
+  }
+
+  .corporate-panel-copy {
+    display: -webkit-box;
+    margin-top: clamp(0.65rem, 2svh, 1.75rem);
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: clamp(1.25rem, 2.6svh, 1.75rem);
+  }
+
+  .corporate-panel-link {
+    margin-top: clamp(0.5rem, 1.6svh, 2rem);
+  }
+
+  .faq-panel-grid {
+    gap: clamp(0.75rem, 3svh, 4rem);
+  }
+
+  .faq-panel-title {
+    margin-top: clamp(0.55rem, 1.6svh, 1.25rem);
+    font-size: clamp(2.25rem, min(6vw, 7.5svh), 3.75rem);
+  }
+
+  .faq-panel-copy {
+    display: -webkit-box;
+    margin-top: clamp(0.5rem, 1.5svh, 1.5rem);
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: clamp(1.2rem, 2.4svh, 1.75rem);
+  }
+
+  .faq-panel-link {
+    margin-top: clamp(0.5rem, 1.5svh, 2rem);
+  }
+
+  .faq-list {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .faq-row {
+    padding-block: clamp(0.45rem, 1.4svh, 1.5rem);
+  }
+
+  .faq-summary {
+    font-size: clamp(1.35rem, min(5.5vw, 3.6svh), 1.875rem);
+    line-height: 1.05;
+  }
+
+  .faq-answer {
+    padding-top: clamp(0.35rem, 1svh, 1rem);
+    padding-bottom: 0.25rem;
+    line-height: 1.35rem;
+  }
+
+  .final-panel-content {
+    padding-top: max(4.75rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .final-panel-title {
+    margin-top: clamp(0.75rem, 2.5svh, 1.5rem);
+    font-size: clamp(3.15rem, min(9vw, 14svh), 8.5rem);
+  }
+
+  .final-panel-copy {
+    margin-top: clamp(0.75rem, 2.5svh, 2rem);
+    line-height: clamp(1.25rem, 2.7svh, 1.75rem);
+  }
+
+  .final-panel-link {
+    margin-top: clamp(0.75rem, 2.5svh, 2.25rem);
+  }
+}
+
+@supports (height: 100dvh) {
+  .viewport-panel {
+    height: 100dvh;
+  }
+}
+
+@supports selector(html:has(.home-viewport-flow)) {
+  html:has(.home-viewport-flow) {
+    scroll-snap-type: y proximity;
+  }
 }
 
 @keyframes drift {
@@ -296,6 +608,84 @@
 @media (min-width: 640px) {
   .container-shell {
     width: min(100% - 4rem, 84rem);
+  }
+
+  .portfolio-support-grid {
+    display: grid;
+  }
+}
+
+@media (min-width: 768px) {
+  .services-panel-grid {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: clamp(19rem, 42svh, 32rem);
+    overflow: hidden;
+  }
+
+  .service-panel-card {
+    border-right: 0;
+  }
+
+  .process-panel-grid li {
+    display: block;
+  }
+
+  .process-step-title {
+    margin-top: clamp(0.75rem, 2svh, 2rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .portfolio-panel-grid {
+    height: clamp(18rem, 45svh, 32rem);
+  }
+
+  .portfolio-feature {
+    height: 100%;
+  }
+
+  .portfolio-support-grid {
+    min-height: 0;
+  }
+
+  .corporate-art {
+    height: clamp(20rem, 50svh, 31rem);
+  }
+
+  .faq-panel-grid {
+    align-items: center;
+  }
+
+  .faq-list {
+    max-height: 62svh;
+  }
+}
+
+@media (min-width: 1280px) {
+  .services-panel-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    height: clamp(15rem, 34svh, 28rem);
+  }
+
+  .service-panel-card:not(:last-child) {
+    border-right: 1px solid var(--border);
+  }
+}
+
+@media (max-height: 720px) {
+  .viewport-panel .eyebrow {
+    font-size: 0.62rem;
+  }
+
+  .viewport-panel .button-primary,
+  .viewport-panel .button-secondary {
+    min-height: 2.5rem;
+    padding-block: 0.65rem;
+  }
+
+  .hero-aside {
+    display: none;
   }
 }
 

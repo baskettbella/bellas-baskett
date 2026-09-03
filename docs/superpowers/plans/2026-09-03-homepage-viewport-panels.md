@@ -23,77 +23,83 @@
 ### Task 1: Viewport behavior contract
 
 **Files:**
+
 - Modify: `tests/e2e/portfolio.spec.ts`
 - Modify: `tests/e2e/service-discovery.spec.ts`
 
 **Interfaces:**
+
 - Consumes: homepage sections rendered under `main#main-content`
 - Produces: browser-level assertions for exact viewport height, horizontal overflow, and in-panel control visibility
 
-- [ ] **Step 1: Write the failing responsive-panel test**
+- [x] **Step 1: Write the failing responsive-panel test**
 
 Add a table-driven Playwright test for 375x667, 393x852, 412x915, 768x1024, 1366x768, 1920x1080, and 3840x2160. For every direct homepage section, assert its bounding height equals `window.innerHeight` within one pixel and every visible link/button/summary fits inside its section.
 
-- [ ] **Step 2: Run the focused test and verify RED**
+- [x] **Step 2: Run the focused test and verify RED**
 
 Run `npm.cmd run test:e2e -- tests/e2e/portfolio.spec.ts --project=chromium` and expect failures because existing sections have natural heights rather than exact viewport heights.
 
-- [ ] **Step 3: Keep the existing hero video contract**
+- [x] **Step 3: Keep the existing hero video contract**
 
 Retain the existing Playwright assertion that the loaded video is 3840x2160 and muted.
 
 ### Task 2: Responsive homepage panels
 
 **Files:**
+
 - Modify: `app/page.tsx`
 - Modify: `app/globals.css`
 
 **Interfaces:**
+
 - Consumes: existing `serviceGroups`, `services`, `faqs`, and Bella's Baskett design tokens
 - Produces: `.home-viewport-flow`, `.viewport-panel`, `.viewport-panel-shell`, and responsive section-specific layouts
 
-- [ ] **Step 1: Add the shared panel contract**
+- [x] **Step 1: Add the shared panel contract**
 
 Give every direct homepage section the `viewport-panel` class and define exact `100svh`/`100dvh` height, clipping, scroll-snap alignment, and safe-area-aware spacing in `app/globals.css`.
 
-- [ ] **Step 2: Make the hero fit short and wide screens**
+- [x] **Step 2: Make the hero fit short and wide screens**
 
 Clamp heading, copy, gaps, and buttons by viewport width and height while preserving the video overlay and both calls to action.
 
-- [ ] **Step 3: Compact editorial and service panels**
+- [x] **Step 3: Compact editorial and service panels**
 
 Centre the studio panel vertically. Replace the tall service card layout with a native horizontal swipe row on narrow screens and responsive grids at medium and extra-large widths.
 
-- [ ] **Step 4: Compact portfolio, process, corporate, and FAQ panels**
+- [x] **Step 4: Compact portfolio, process, corporate, and FAQ panels**
 
 Remove fixed oversized card heights, use height-aware clamps, and ensure all panel controls remain inside their boundaries at 375x667.
 
-- [ ] **Step 5: Fit the final CTA panel**
+- [x] **Step 5: Fit the final CTA panel**
 
 Centre the final CTA with safe-area padding and height-aware typography.
 
-- [ ] **Step 6: Run focused tests and verify GREEN**
+- [x] **Step 6: Run focused tests and verify GREEN**
 
 Run `npm.cmd run test:e2e -- tests/e2e/portfolio.spec.ts tests/e2e/service-discovery.spec.ts --project=chromium` and expect all viewport and hero video tests to pass.
 
 ### Task 3: Full verification and delivery
 
 **Files:**
+
 - Modify only if verification reveals a regression in a file changed above.
 
 **Interfaces:**
+
 - Consumes: completed homepage panel implementation
 - Produces: verified build and deployed private Sites version
 
-- [ ] **Step 1: Run unit and static checks**
+- [x] **Step 1: Run unit and static checks**
 
 Run `npm.cmd run test:run`, `npm.cmd run lint`, and `npm.cmd run build`; expect zero failures.
 
-- [ ] **Step 2: Run the complete browser suite**
+- [x] **Step 2: Run the complete browser suite**
 
 Run `npm.cmd run test:e2e`; expect all public-route, accessibility, configurator, portfolio, responsive, and hero video checks to pass.
 
-- [ ] **Step 3: Inspect the result at phone, laptop, and 4K sizes**
+- [x] **Step 3: Inspect the result at phone, laptop, and 4K sizes**
 
 Open the local homepage and confirm the hero crop, text hierarchy, service swipe row, and section boundaries visually at 393x852, 1366x768, and 3840x2160.
 
