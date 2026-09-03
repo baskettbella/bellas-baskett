@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -258,5 +258,6 @@ async function buildStandaloneHtml() {
 }
 
 const standaloneHtml = await buildStandaloneHtml();
+await mkdir(dirname(outputPath), { recursive: true });
 await writeFile(outputPath, standaloneHtml, 'utf8');
 console.log(`Standalone website created: ${outputPath}`);

@@ -36,4 +36,20 @@ describe('standalone website export', () => {
     expect(html).not.toMatch(/(?:src|href)="\/(?!\/)/);
     expect(html).not.toContain('<link rel="stylesheet"');
   });
+
+  it('creates a missing parent directory for deployment output', () => {
+    const directory = mkdtempSync(join(tmpdir(), 'bellas-vercel-'));
+    temporaryDirectories.push(directory);
+    const outputPath = join(directory, 'vercel-output', 'index.html');
+
+    execFileSync(
+      process.execPath,
+      ['tools/export-standalone.mjs', '--output', outputPath],
+      { cwd: process.cwd(), stdio: 'pipe' },
+    );
+
+    expect(readFileSync(outputPath, 'utf8')).toContain(
+      '<title>Bella&#x27;s Baskett',
+    );
+  });
 });
