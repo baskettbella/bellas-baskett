@@ -1,18 +1,10 @@
 import Link from 'next/link';
-import {
-  ArrowDown,
-  ArrowRight,
-  Building2,
-  Gift,
-  Heart,
-  Sparkles,
-} from 'lucide-react';
+import { ArrowRight, Building2, Gift, Heart, Sparkles } from 'lucide-react';
 
 import { FloralMark } from '@/components/brand/floral-mark';
 import { SectionHeading } from '@/components/brand/section-heading';
 import { faqs } from '@/content/faq';
 import { serviceGroups, services } from '@/content/services';
-import { siteConfig } from '@/content/site';
 
 const serviceIcons = {
   celebrations: Sparkles,
@@ -38,51 +30,57 @@ export default function Home() {
           <source src="/flowers-hero-4k.mp4" type="video/mp4" />
         </video>
         <div className="hero-video-overlay absolute inset-0" />
-        <div className="absolute -left-24 bottom-[-22%] size-[34rem] rounded-full border border-[var(--champagne)]/20 opacity-55" />
 
-        <div className="container-shell hero-panel-shell relative z-10 grid items-end gap-10 lg:grid-cols-[1fr_0.4fr]">
-          <div className="hero-copy-highlight animate-reveal max-w-5xl">
-            <p className="eyebrow text-[var(--champagne)]">
+        <div className="container-shell hero-panel-shell relative z-10">
+          <div className="hero-copy-highlight animate-reveal mx-auto flex max-w-6xl flex-col items-center text-center">
+            <p className="hero-kicker-capsule eyebrow text-[var(--champagne)]">
               Bespoke event styling · Kuala Lumpur
             </p>
-            <h1 className="hero-title font-display font-medium tracking-[-0.055em]">
+            <h1 className="hero-title font-display text-center font-medium tracking-[-0.055em]">
               Celebrations,
-              <span className="mt-4 block pl-[8%] italic text-[var(--blush)]">
+              <span className="block italic text-[var(--blush)]">
                 beautifully imagined.
               </span>
             </h1>
-            <p className="hero-description max-w-xl text-sm text-white/80 sm:text-base">
+            <p className="hero-description max-w-2xl text-sm text-white/80 sm:text-base">
               We create atmospheric, deeply personal settings for life&apos;s
               meaningful gatherings, brand moments and beautiful surprises.
             </p>
-            <div className="hero-actions flex flex-col gap-3 sm:flex-row">
+            <div className="hero-actions flex flex-wrap justify-center gap-3">
               <Link
                 href="/plan-your-event"
-                className="button-primary border-[var(--mist)] bg-[var(--mist)] text-[var(--wine)]"
+                className="button-primary hero-action-pill border-[var(--mist)] bg-[var(--mist)] text-[var(--wine)]"
               >
                 Plan your event <ArrowRight size={15} />
               </Link>
               <Link
                 href="/portfolio"
-                className="button-secondary border-white/35"
+                className="button-secondary hero-action-pill border-white/35"
               >
                 Explore our work
               </Link>
             </div>
           </div>
 
-          <div className="hero-aside hidden justify-self-end pb-3 text-right lg:block">
-            <p className="max-w-xs text-xs leading-6 text-white/80">
-              Styling celebrations, weddings, corporate gatherings, gifts and
-              surprise moments across {siteConfig.serviceArea}.
-            </p>
-            <a
-              href="#introduction"
-              className="mt-7 inline-flex items-center gap-3 text-[0.66rem] font-bold uppercase tracking-[0.18em]"
-            >
-              Discover the studio <ArrowDown size={14} />
-            </a>
-          </div>
+          <nav
+            className="hero-service-strip animate-reveal"
+            aria-label="Service categories"
+          >
+            <p>Thoughtful styling for every kind of gathering</p>
+            <div>
+              {serviceGroups.map((group) => {
+                const leadService = services.find(
+                  (service) => service.category === group.id,
+                )!;
+
+                return (
+                  <Link key={group.id} href={leadService.href}>
+                    {group.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </nav>
         </div>
       </section>
 

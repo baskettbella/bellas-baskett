@@ -136,7 +136,7 @@ const portableStyles = String.raw`<style id="portable-site-styles">
     margin: 0;
     border: 0;
     padding: max(1rem, env(safe-area-inset-top)) 1.25rem max(1.25rem, env(safe-area-inset-bottom));
-    background: color-mix(in srgb, var(--wine) 60%, transparent);
+    background: color-mix(in srgb, var(--wine) 85%, transparent);
     backdrop-filter: blur(1rem);
     color: var(--mist);
     overflow: hidden;

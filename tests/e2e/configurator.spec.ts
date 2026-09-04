@@ -164,7 +164,7 @@ test('mobile menu has a translucent clean backdrop and bare close icon', async (
     .getByRole('button', { name: 'Close menu' })
     .evaluate((element) => getComputedStyle(element).borderTopWidth);
 
-  expect(backgroundColor).toMatch(/(?:\/|,)\s*0\.6\)?$/);
+  expect(backgroundColor).toMatch(/(?:\/|,)\s*0\.85\)?$/);
   await expect(trigger).toHaveCSS('visibility', 'hidden');
   await expect(menu.locator(':scope > div[aria-hidden="true"]')).toHaveCount(0);
   expect(closeBorderWidth).toBe('0px');

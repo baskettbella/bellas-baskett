@@ -13,6 +13,37 @@ test('portfolio category filter updates the editorial selection', async ({
   await expect(page.getByRole('article')).toHaveCount(1);
 });
 
+test('homepage presents a centered cinematic hero with capsule navigation', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+
+  const hero = page.locator('.viewport-hero');
+  const title = hero.getByRole('heading', { level: 1 });
+  const primaryNavigation = page.getByRole('navigation', {
+    name: 'Primary navigation',
+  });
+  const primaryAction = hero.getByRole('link', { name: /plan your event/i });
+
+  await expect(title).toHaveCSS('text-align', 'center');
+  await expect(
+    hero.getByRole('navigation', { name: 'Service categories' }),
+  ).toBeVisible();
+
+  const [navigationRadius, actionRadius] = await Promise.all([
+    primaryNavigation.evaluate((element) =>
+      Number.parseFloat(getComputedStyle(element).borderTopLeftRadius),
+    ),
+    primaryAction.evaluate((element) =>
+      Number.parseFloat(getComputedStyle(element).borderTopLeftRadius),
+    ),
+  ]);
+
+  expect(navigationRadius).toBeGreaterThan(20);
+  expect(actionRadius).toBeGreaterThan(20);
+});
+
 const responsiveViewports = [
   { name: 'iPhone SE', width: 375, height: 667 },
   { name: 'iPhone 15', width: 393, height: 852 },

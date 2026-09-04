@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { ArrowUpRight, Menu, X } from 'lucide-react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -48,8 +48,8 @@ export function SiteHeader() {
   }, [isOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-[color:var(--border)] bg-[color:color-mix(in_srgb,var(--porcelain)_88%,transparent)] backdrop-blur-xl">
-      <div className="container-shell flex h-[4.75rem] items-center justify-between gap-5">
+    <header className="site-header fixed inset-x-0 top-0 z-50">
+      <div className="site-header-shell container-shell flex items-center justify-between gap-5">
         <Link
           href="/"
           className="brand-logo-link"
@@ -66,27 +66,26 @@ export function SiteHeader() {
         </Link>
 
         <nav
-          className="hidden items-center gap-7 lg:flex"
+          className="desktop-nav-capsule hidden items-center lg:flex"
           aria-label="Primary navigation"
         >
-          {primaryNavigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-[0.69rem] font-bold uppercase tracking-[0.16em] text-[var(--cocoa)] transition-colors hover:text-[var(--rose)]"
-            >
-              {item.label}
-            </Link>
-          ))}
+          <div className="flex items-center gap-6 px-5">
+            {primaryNavigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="desktop-nav-link"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+          <Link href="/plan-your-event" className="desktop-nav-action">
+            Plan your event <ArrowUpRight size={14} aria-hidden="true" />
+          </Link>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href="/plan-your-event"
-            className="button-primary hidden sm:inline-flex"
-          >
-            Plan your event
-          </Link>
+        <div className="flex items-center gap-2 lg:hidden">
           <button
             type="button"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
@@ -96,7 +95,7 @@ export function SiteHeader() {
             tabIndex={isOpen ? -1 : undefined}
             disabled={!isHydrated}
             onClick={() => setIsOpen((open) => !open)}
-            className={`grid size-11 place-items-center text-[var(--wine)] lg:hidden ${isOpen ? 'invisible' : ''}`}
+            className={`mobile-nav-trigger grid size-11 place-items-center text-[var(--wine)] ${isOpen ? 'invisible' : ''}`}
           >
             {isOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
           </button>
