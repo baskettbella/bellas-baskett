@@ -35,7 +35,7 @@ test('visitor can prepare and review a WhatsApp enquiry', async ({ page }) => {
 
 test('mobile menu supports keyboard focus and escape', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/journal');
   const menuButton = page.getByRole('button', { name: 'Open menu' });
   await expect(menuButton).toBeEnabled();
   await menuButton.focus();
@@ -73,4 +73,57 @@ test('mobile menu fills the viewport and closes from its controls', async ({
   await page.getByRole('button', { name: 'Open menu' }).click();
   await page.evaluate(() => window.dispatchEvent(new Event('scroll')));
   await expect(menu).toHaveCount(0);
+});
+
+test('mobile menu centers its compact links and closes after a swipe', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/journal');
+  await page.getByRole('button', { name: 'Open menu' }).click();
+
+  const menu = page.getByRole('dialog', { name: 'Site menu' });
+  const navigation = menu.getByRole('navigation', {
+    name: 'Mobile navigation',
+  });
+  const logo = menu.getByRole('img', {
+    name: "Bella's Baskett menu logo",
+  });
+  const bounds = await navigation.boundingBox();
+
+  expect(bounds).not.toBeNull();
+  expect(bounds?.width).toBeLessThanOrEqual(320);
+  expect(
+    Math.abs((bounds?.x ?? 0) + (bounds?.width ?? 0) / 2 - 195),
+  ).toBeLessThanOrEqual(2);
+  await expect(menu.getByText(/^0[1-5]$/)).toHaveCount(0);
+  await expect(logo).toHaveCSS('opacity', '0.7');
+
+  await menu.dispatchEvent('pointerdown', {
+    pointerId: 1,
+    pointerType: 'touch',
+    clientX: 190,
+    clientY: 220,
+  });
+  await menu.dispatchEvent('pointerup', {
+    pointerId: 1,
+    pointerType: 'touch',
+    clientX: 194,
+    clientY: 292,
+  });
+  await expect(menu).toHaveCount(0);
+});
+
+test('mobile menu keeps its action visible on a compact phone viewport', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto('/journal');
+  await page.getByRole('button', { name: 'Open menu' }).click();
+
+  const menu = page.getByRole('dialog', { name: 'Site menu' });
+  await expect(
+    menu.getByRole('link', { name: 'Plan your event' }),
+  ).toBeInViewport({ ratio: 1 });
+  await expect(menu.getByText('Swipe to close')).toBeInViewport({ ratio: 1 });
 });

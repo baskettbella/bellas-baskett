@@ -59,4 +59,46 @@ describe('SiteHeader', () => {
       screen.queryByRole('dialog', { name: /site menu/i }),
     ).not.toBeInTheDocument();
   });
+
+  it('shows a compact unnumbered menu with the transparent brand mark', async () => {
+    const user = userEvent.setup();
+    render(<SiteHeader />);
+
+    await user.click(screen.getByRole('button', { name: /open menu/i }));
+
+    const menu = screen.getByRole('dialog', { name: /site menu/i });
+    const navigation = within(menu).getByRole('navigation', {
+      name: /mobile navigation/i,
+    });
+
+    expect(
+      within(menu).getByRole('img', {
+        name: /bella's baskett menu logo/i,
+      }),
+    ).toBeVisible();
+    expect(
+      within(navigation).getByRole('link', { name: 'About' }),
+    ).toBeVisible();
+    expect(within(navigation).queryByText(/^0[1-5]$/)).not.toBeInTheDocument();
+  });
+
+  it('closes after a deliberate vertical swipe but ignores a tap-sized drag', async () => {
+    const user = userEvent.setup();
+    render(<SiteHeader />);
+
+    const trigger = screen.getByRole('button', { name: /open menu/i });
+    await user.click(trigger);
+
+    const menu = screen.getByRole('dialog', { name: /site menu/i });
+    fireEvent.pointerDown(menu, { clientX: 160, clientY: 220 });
+    fireEvent.pointerUp(menu, { clientX: 164, clientY: 238 });
+    expect(menu).toBeVisible();
+
+    fireEvent.pointerDown(menu, { clientX: 160, clientY: 220 });
+    fireEvent.pointerUp(menu, { clientX: 166, clientY: 290 });
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(
+      screen.queryByRole('dialog', { name: /site menu/i }),
+    ).not.toBeInTheDocument();
+  });
 });

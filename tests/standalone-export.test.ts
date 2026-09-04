@@ -33,6 +33,8 @@ describe('standalone website export', () => {
     expect(html).toContain('data:video/mp4;base64,');
     expect(html).toContain('<style id="compiled-site-styles">');
     expect(html).toContain('id="mobile-menu"');
+    expect(html).toContain('alt="Bella&#39;s Baskett menu logo"');
+    expect(html).not.toMatch(/<small>0[1-5]<\/small>/);
     expect(html.match(/class="viewport-panel/g)).toHaveLength(8);
     expect(html).not.toMatch(/(?:src|href)="\/(?!\/)/);
     expect(html).not.toContain('<link rel="stylesheet"');
@@ -60,6 +62,16 @@ describe('standalone website export', () => {
     expect(menu).toHaveAttribute('open');
 
     window.dispatchEvent(new Event('scroll'));
+    expect(menu).not.toHaveAttribute('open');
+
+    trigger?.click();
+    expect(menu).toHaveAttribute('open');
+    menu?.dispatchEvent(
+      new MouseEvent('pointerdown', { bubbles: true, clientY: 120 }),
+    );
+    menu?.dispatchEvent(
+      new MouseEvent('pointerup', { bubbles: true, clientY: 190 }),
+    );
     expect(menu).not.toHaveAttribute('open');
   });
 

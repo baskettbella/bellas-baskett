@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import type { PointerEvent as ReactPointerEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import { primaryNavigation } from '@/content/site';
@@ -10,9 +11,27 @@ import { useHydrated } from '@/hooks/use-hydrated';
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const firstMenuItemRef = useRef<HTMLAnchorElement>(null);
+  const swipeStartRef = useRef<{ x: number; y: number } | null>(null);
   const isHydrated = useHydrated();
 
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDialogElement>) => {
+    swipeStartRef.current = { x: event.clientX, y: event.clientY };
+  };
+
+  const handlePointerUp = (event: ReactPointerEvent<HTMLDialogElement>) => {
+    const start = swipeStartRef.current;
+    swipeStartRef.current = null;
+    if (!start) return;
+
+    const horizontalDistance = Math.abs(event.clientX - start.x);
+    const verticalDistance = Math.abs(event.clientY - start.y);
+    if (verticalDistance >= 56 && verticalDistance > horizontalDistance) {
+      setIsOpen(false);
+    }
+  };
+
   useEffect(() => {
+    if (!isOpen) swipeStartRef.current = null;
     const closeMenu = () => setIsOpen(false);
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setIsOpen(false);
@@ -90,21 +109,18 @@ export function SiteHeader() {
           id="mobile-menu"
           aria-modal="true"
           aria-label="Site menu"
-          className="mobile-nav-screen fixed inset-0 z-[60] m-0 flex h-dvh max-h-none w-screen max-w-none flex-col overflow-hidden border-0 bg-[var(--wine)] px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] text-[var(--mist)] lg:hidden sm:px-8"
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={() => {
+            swipeStartRef.current = null;
+          }}
+          className="mobile-nav-screen fixed inset-0 z-[60] m-0 flex h-dvh max-h-none w-screen max-w-none touch-none flex-col overflow-hidden border-0 bg-[var(--wine)] px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] text-[var(--mist)] lg:hidden sm:px-8"
         >
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-24 -top-28 size-80 rounded-full border border-white/10 bg-[radial-gradient(circle_at_center,rgba(229,209,210,0.17),transparent_67%)]"
           />
-          <div className="relative z-10 flex items-center justify-between border-b border-white/15 pb-4">
-            <div>
-              <p className="eyebrow text-[var(--champagne)]">
-                Bella&apos;s Baskett
-              </p>
-              <p className="mt-1 text-[0.68rem] tracking-[0.09em] text-white/55">
-                Celebrations, beautifully imagined.
-              </p>
-            </div>
+          <div className="relative z-10 flex justify-end">
             <button
               type="button"
               aria-label="Close menu"
@@ -114,45 +130,51 @@ export function SiteHeader() {
               <X aria-hidden="true" />
             </button>
           </div>
-          <nav
-            className="relative z-10 flex flex-1 flex-col justify-center py-4"
-            aria-label="Mobile navigation"
-          >
-            {primaryNavigation.map((item, index) => (
-              <Link
-                key={item.href}
-                ref={index === 0 ? firstMenuItemRef : undefined}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className="font-display group flex items-center justify-between border-b border-white/15 py-[clamp(0.62rem,1.75vh,1rem)] text-[clamp(2.25rem,11vw,4.75rem)] leading-[0.88] tracking-[-0.025em] transition-colors hover:text-[var(--champagne)]"
+          <div className="relative z-10 flex flex-1 items-center justify-center py-5">
+            <div className="w-full max-w-xs sm:max-w-sm">
+              <div className="mx-auto mb-6 aspect-[3.15/1] w-[clamp(8.5rem,38vw,11rem)] overflow-hidden">
+                {/* oxlint-disable-next-line next/no-img-element -- The transparent local logo is also embedded into the downloadable offline page. */}
+                <img
+                  src="/bellas-baskett-logo-transparent.png"
+                  width={554}
+                  height={554}
+                  alt="Bella's Baskett menu logo"
+                  className="h-auto w-full -translate-y-[33.5%] brightness-0 invert opacity-70"
+                />
+              </div>
+              <nav
+                className="mx-auto flex w-full flex-col"
+                aria-label="Mobile navigation"
               >
-                <span className="flex items-center">
-                  <span className="mr-4 font-sans text-[0.62rem] tracking-[0.2em] text-[var(--champagne)]">
-                    0{index + 1}
-                  </span>
-                  {item.label}
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="font-sans text-lg text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[var(--champagne)]"
-                >
-                  ↗
-                </span>
+                {primaryNavigation.map((item, index) => (
+                  <Link
+                    key={item.href}
+                    ref={index === 0 ? firstMenuItemRef : undefined}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className="font-display group relative flex items-center justify-center overflow-hidden border-b border-white/15 px-7 py-[clamp(0.58rem,1.4vh,0.78rem)] text-center text-[clamp(1.65rem,7.5vw,2.35rem)] leading-none tracking-[-0.015em] transition-all duration-300 hover:bg-white/[0.06] hover:px-9 hover:text-[var(--champagne)] active:scale-[0.98] active:bg-white/10"
+                  >
+                    {item.label}
+                    <span
+                      aria-hidden="true"
+                      className="absolute right-4 font-sans text-sm text-white/30 opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:text-[var(--champagne)] group-hover:opacity-100 group-focus-visible:opacity-100"
+                    >
+                      ↗
+                    </span>
+                  </Link>
+                ))}
+              </nav>
+              <Link
+                href="/plan-your-event"
+                onClick={() => setIsOpen(false)}
+                className="button-secondary mt-7 w-full border-white/35"
+              >
+                Plan your event
               </Link>
-            ))}
-          </nav>
-          <div className="relative z-10 flex items-center gap-5">
-            <Link
-              href="/plan-your-event"
-              onClick={() => setIsOpen(false)}
-              className="button-secondary flex-1 border-white/35"
-            >
-              Plan your event
-            </Link>
-            <span className="hidden text-right text-[0.62rem] uppercase leading-5 tracking-[0.16em] text-white/45 sm:block">
-              Kuala Lumpur
-              <br />& Klang Valley
-            </span>
+              <p className="mt-4 text-center text-[0.58rem] uppercase tracking-[0.2em] text-white/35">
+                Swipe to close
+              </p>
+            </div>
           </div>
         </dialog>
       ) : null}
