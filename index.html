@@ -186,7 +186,7 @@
       const horizontalDistance = Math.abs(event.clientX - swipeStart.x);
       const verticalDistance = Math.abs(event.clientY - swipeStart.y);
       swipeStart = null;
-      if (verticalDistance >= 56 && verticalDistance > horizontalDistance) closeMenu();
+      if (Math.max(horizontalDistance, verticalDistance) >= 56) closeMenu();
     });
     menu?.addEventListener('pointercancel', () => { swipeStart = null; });
     window.addEventListener('scroll', closeMenu, { passive: true });

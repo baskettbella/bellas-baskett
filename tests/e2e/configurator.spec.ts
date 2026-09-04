@@ -127,3 +127,55 @@ test('mobile menu keeps its action visible on a compact phone viewport', async (
   ).toBeInViewport({ ratio: 1 });
   await expect(menu.getByText('Swipe to close')).toBeInViewport({ ratio: 1 });
 });
+
+test.describe('native touch navigation', () => {
+  test.use({ hasTouch: true });
+
+  test('mobile menu closes after a real finger swipe', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/journal');
+    await page.getByRole('button', { name: 'Open menu' }).click();
+
+    const menu = page.getByRole('dialog', { name: 'Site menu' });
+    const session = await page.context().newCDPSession(page);
+    await session.send('Input.dispatchTouchEvent', {
+      type: 'touchStart',
+      touchPoints: [{ x: 195, y: 420 }],
+    });
+    await session.send('Input.dispatchTouchEvent', {
+      type: 'touchMove',
+      touchPoints: [{ x: 195, y: 500 }],
+    });
+    await session.send('Input.dispatchTouchEvent', {
+      type: 'touchEnd',
+      touchPoints: [],
+    });
+
+    await expect(menu).toHaveCount(0);
+  });
+
+  test('mobile menu closes after a real horizontal finger swipe', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/journal');
+    await page.getByRole('button', { name: 'Open menu' }).click();
+
+    const menu = page.getByRole('dialog', { name: 'Site menu' });
+    const session = await page.context().newCDPSession(page);
+    await session.send('Input.dispatchTouchEvent', {
+      type: 'touchStart',
+      touchPoints: [{ x: 90, y: 420 }],
+    });
+    await session.send('Input.dispatchTouchEvent', {
+      type: 'touchMove',
+      touchPoints: [{ x: 170, y: 426 }],
+    });
+    await session.send('Input.dispatchTouchEvent', {
+      type: 'touchEnd',
+      touchPoints: [],
+    });
+
+    await expect(menu).toHaveCount(0);
+  });
+});

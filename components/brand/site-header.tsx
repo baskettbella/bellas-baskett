@@ -25,7 +25,7 @@ export function SiteHeader() {
 
     const horizontalDistance = Math.abs(event.clientX - start.x);
     const verticalDistance = Math.abs(event.clientY - start.y);
-    if (verticalDistance >= 56 && verticalDistance > horizontalDistance) {
+    if (Math.max(horizontalDistance, verticalDistance) >= 56) {
       setIsOpen(false);
     }
   };

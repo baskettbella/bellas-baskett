@@ -73,6 +73,24 @@ describe('standalone website export', () => {
       new MouseEvent('pointerup', { bubbles: true, clientY: 190 }),
     );
     expect(menu).not.toHaveAttribute('open');
+
+    trigger?.click();
+    expect(menu).toHaveAttribute('open');
+    menu?.dispatchEvent(
+      new MouseEvent('pointerdown', {
+        bubbles: true,
+        clientX: 90,
+        clientY: 180,
+      }),
+    );
+    menu?.dispatchEvent(
+      new MouseEvent('pointerup', {
+        bubbles: true,
+        clientX: 164,
+        clientY: 185,
+      }),
+    );
+    expect(menu).not.toHaveAttribute('open');
   });
 
   it('creates a missing parent directory for deployment output', () => {

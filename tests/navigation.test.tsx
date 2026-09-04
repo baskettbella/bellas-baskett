@@ -101,4 +101,21 @@ describe('SiteHeader', () => {
       screen.queryByRole('dialog', { name: /site menu/i }),
     ).not.toBeInTheDocument();
   });
+
+  it('closes after a deliberate horizontal swipe', async () => {
+    const user = userEvent.setup();
+    render(<SiteHeader />);
+
+    const trigger = screen.getByRole('button', { name: /open menu/i });
+    await user.click(trigger);
+
+    const menu = screen.getByRole('dialog', { name: /site menu/i });
+    fireEvent.pointerDown(menu, { clientX: 90, clientY: 260 });
+    fireEvent.pointerUp(menu, { clientX: 164, clientY: 266 });
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(
+      screen.queryByRole('dialog', { name: /site menu/i }),
+    ).not.toBeInTheDocument();
+  });
 });
