@@ -49,3 +49,28 @@ test('mobile menu supports keyboard focus and escape', async ({ page }) => {
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog', { name: 'Site menu' })).toHaveCount(0);
 });
+
+test('mobile menu fills the viewport and closes from its controls', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/journal');
+
+  await page.evaluate(() => window.scrollTo(0, 500));
+  await page.getByRole('button', { name: 'Open menu' }).click();
+
+  const menu = page.getByRole('dialog', { name: 'Site menu' });
+  const bounds = await menu.boundingBox();
+  expect(bounds).not.toBeNull();
+  expect(bounds?.x).toBeLessThanOrEqual(1);
+  expect(bounds?.y).toBeLessThanOrEqual(1);
+  expect(bounds?.width).toBeGreaterThanOrEqual(389);
+  expect(bounds?.height).toBeGreaterThanOrEqual(843);
+
+  await menu.getByRole('button', { name: 'Close menu' }).click();
+  await expect(menu).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Open menu' }).click();
+  await page.evaluate(() => window.dispatchEvent(new Event('scroll')));
+  await expect(menu).toHaveCount(0);
+});

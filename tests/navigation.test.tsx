@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
@@ -32,9 +32,31 @@ describe('SiteHeader', () => {
 
     await user.click(trigger);
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByRole('dialog', { name: /site menu/i })).toBeVisible();
+    const menu = screen.getByRole('dialog', { name: /site menu/i });
+    expect(menu).toBeVisible();
+
+    await user.click(within(menu).getByRole('button', { name: /close menu/i }));
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    await user.click(trigger);
 
     await user.keyboard('{Escape}');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('closes the mobile navigation when the page scrolls', async () => {
+    const user = userEvent.setup();
+    render(<SiteHeader />);
+
+    const trigger = screen.getByRole('button', { name: /open menu/i });
+    await user.click(trigger);
+    expect(screen.getByRole('dialog', { name: /site menu/i })).toBeVisible();
+
+    fireEvent.scroll(window);
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(
+      screen.queryByRole('dialog', { name: /site menu/i }),
+    ).not.toBeInTheDocument();
   });
 });

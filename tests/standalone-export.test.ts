@@ -36,6 +36,31 @@ describe('standalone website export', () => {
     expect(html.match(/class="viewport-panel/g)).toHaveLength(8);
     expect(html).not.toMatch(/(?:src|href)="\/(?!\/)/);
     expect(html).not.toContain('<link rel="stylesheet"');
+
+    const portableScript = html.match(
+      /<script>([\s\S]*?)<\/script><\/body>/,
+    )?.[1];
+    expect(portableScript).toBeDefined();
+    document.body.innerHTML = `
+      <button aria-controls="mobile-menu" aria-expanded="false"></button>
+      <dialog id="mobile-menu">
+        <button class="portable-mobile-menu__close"></button>
+        <a href="#introduction">About</a>
+      </dialog>
+    `;
+    // oxlint-disable-next-line typescript/no-implied-eval -- Execute the generated offline script against a controlled DOM fixture.
+    new Function(portableScript ?? '')();
+
+    const trigger = document.querySelector<HTMLButtonElement>(
+      '[aria-controls="mobile-menu"]',
+    );
+    const menu = document.getElementById('mobile-menu');
+
+    trigger?.click();
+    expect(menu).toHaveAttribute('open');
+
+    window.dispatchEvent(new Event('scroll'));
+    expect(menu).not.toHaveAttribute('open');
   });
 
   it('creates a missing parent directory for deployment output', () => {

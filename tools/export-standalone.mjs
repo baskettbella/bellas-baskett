@@ -107,7 +107,7 @@ function addPanelAnchors(html) {
 const portableMenu = String.raw`
 <dialog id="mobile-menu" class="portable-mobile-menu" aria-label="Site menu">
   <div class="portable-mobile-menu__bar">
-    <span>Explore the studio</span>
+    <span><strong>Bella's Baskett</strong><small>Celebrations, beautifully imagined.</small></span>
     <button type="button" class="portable-mobile-menu__close" aria-label="Close menu">×</button>
   </div>
   <nav aria-label="Mobile navigation">
@@ -122,16 +122,19 @@ const portableMenu = String.raw`
 
 const portableStyles = String.raw`<style id="portable-site-styles">
   .portable-mobile-menu {
-    inset: 4.75rem 0 0;
-    width: 100%;
-    height: calc(100dvh - 4.75rem);
+    inset: 0;
+    z-index: 60;
+    width: 100vw;
+    height: 100dvh;
     max-width: none;
     max-height: none;
     margin: 0;
     border: 0;
-    padding: 1.5rem;
+    padding: max(1rem, env(safe-area-inset-top)) 1.25rem max(1.25rem, env(safe-area-inset-bottom));
     background: var(--wine);
     color: var(--mist);
+    overflow: hidden;
+    animation: portable-menu-reveal 420ms cubic-bezier(.22, 1, .36, 1) both;
   }
   .portable-mobile-menu[open] { display: flex; flex-direction: column; }
   .portable-mobile-menu::backdrop { background: transparent; }
@@ -139,29 +142,51 @@ const portableStyles = String.raw`<style id="portable-site-styles">
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid rgb(255 255 255 / 15%);
+    padding-bottom: 1rem;
     color: var(--champagne);
     font-size: .69rem;
     font-weight: 700;
     letter-spacing: .22em;
     text-transform: uppercase;
   }
+  .portable-mobile-menu__bar strong { display: block; }
+  .portable-mobile-menu__bar small {
+    display: block;
+    margin-top: .3rem;
+    color: rgb(255 255 255 / 55%);
+    font-size: .62rem;
+    font-weight: 400;
+    letter-spacing: .09em;
+    text-transform: none;
+  }
   .portable-mobile-menu__close {
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 999px;
     color: var(--mist);
     font-size: 2rem;
     line-height: 1;
   }
-  .portable-mobile-menu nav { display: flex; flex: 1; flex-direction: column; margin-top: 1.75rem; }
+  .portable-mobile-menu nav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: 1rem;
+  }
   .portable-mobile-menu nav a {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     border-bottom: 1px solid rgb(255 255 255 / 15%);
-    padding: .72rem 0;
+    padding: clamp(.62rem, 1.75vh, 1rem) 0;
     color: inherit;
     font-family: var(--font-cormorant), Georgia, serif;
-    font-size: clamp(2.2rem, 11vw, 4rem);
-    line-height: 1;
+    font-size: clamp(2.25rem, 11vw, 4.75rem);
+    letter-spacing: -.025em;
+    line-height: .88;
   }
   .portable-mobile-menu nav small {
     margin-right: 1rem;
@@ -182,6 +207,10 @@ const portableStyles = String.raw`<style id="portable-site-styles">
     font-weight: 750;
     letter-spacing: .13em;
     text-transform: uppercase;
+  }
+  @keyframes portable-menu-reveal {
+    from { opacity: 0; transform: translateY(-1rem); }
+    to { opacity: 1; transform: translateY(0); }
   }
   @media (min-width: 1024px) { .portable-mobile-menu { display: none !important; } }
 </style>`;
@@ -215,6 +244,7 @@ const portableScript = String.raw`<script>
     closeButton?.addEventListener('click', closeMenu);
     menu?.addEventListener('close', closeMenu);
     menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+    window.addEventListener('scroll', closeMenu, { passive: true });
   })();
 </script>`;
 
