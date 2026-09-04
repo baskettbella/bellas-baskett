@@ -136,11 +136,13 @@ const portableStyles = String.raw`<style id="portable-site-styles">
     margin: 0;
     border: 0;
     padding: max(1rem, env(safe-area-inset-top)) 1.25rem max(1.25rem, env(safe-area-inset-bottom));
-    background: var(--wine);
+    background: color-mix(in srgb, var(--wine) 60%, transparent);
+    backdrop-filter: blur(1rem);
     color: var(--mist);
     overflow: hidden;
     touch-action: none;
-    animation: portable-menu-reveal 420ms cubic-bezier(.22, 1, .36, 1) both;
+    animation: portable-menu-reveal 560ms cubic-bezier(.16, 1, .3, 1) both;
+    will-change: transform, opacity;
   }
   .portable-mobile-menu[open] { display: flex; flex-direction: column; }
   .portable-mobile-menu::backdrop { background: transparent; }
@@ -152,8 +154,7 @@ const portableStyles = String.raw`<style id="portable-site-styles">
   .portable-mobile-menu__close {
     width: 3rem;
     height: 3rem;
-    border: 1px solid rgb(255 255 255 / 25%);
-    border-radius: 999px;
+    border: 0;
     color: var(--mist);
     font-size: 2rem;
     line-height: 1;
@@ -248,7 +249,7 @@ const portableStyles = String.raw`<style id="portable-site-styles">
     text-transform: uppercase;
   }
   @keyframes portable-menu-reveal {
-    from { opacity: 0; transform: translateY(-1rem); }
+    from { opacity: 0; transform: translateY(100%); }
     to { opacity: 1; transform: translateY(0); }
   }
   @media (min-width: 1024px) { .portable-mobile-menu { display: none !important; } }
@@ -267,6 +268,7 @@ const portableScript = String.raw`<script>
       else menu.removeAttribute('open');
       trigger?.setAttribute('aria-expanded', 'false');
       trigger?.setAttribute('aria-label', 'Open menu');
+      if (trigger) trigger.style.visibility = '';
       document.body.style.overflow = '';
       swipeStart = null;
     };
@@ -278,6 +280,7 @@ const portableScript = String.raw`<script>
       else menu.setAttribute('open', '');
       trigger.setAttribute('aria-expanded', 'true');
       trigger.setAttribute('aria-label', 'Close menu');
+      trigger.style.visibility = 'hidden';
       document.body.style.overflow = 'hidden';
       menu.querySelector('a')?.focus();
     });

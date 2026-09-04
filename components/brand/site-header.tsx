@@ -96,7 +96,7 @@ export function SiteHeader() {
             tabIndex={isOpen ? -1 : undefined}
             disabled={!isHydrated}
             onClick={() => setIsOpen((open) => !open)}
-            className="grid size-11 place-items-center text-[var(--wine)] lg:hidden"
+            className={`grid size-11 place-items-center text-[var(--wine)] lg:hidden ${isOpen ? 'invisible' : ''}`}
           >
             {isOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
           </button>
@@ -114,18 +114,14 @@ export function SiteHeader() {
           onPointerCancel={() => {
             swipeStartRef.current = null;
           }}
-          className="mobile-nav-screen fixed inset-0 z-[60] m-0 flex h-dvh max-h-none w-screen max-w-none touch-none flex-col overflow-hidden border-0 bg-[var(--wine)] px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] text-[var(--mist)] lg:hidden sm:px-8"
+          className="mobile-nav-screen fixed inset-0 z-[60] m-0 flex h-dvh max-h-none w-screen max-w-none touch-none flex-col overflow-hidden border-0 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] text-[var(--mist)] lg:hidden sm:px-8"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-24 -top-28 size-80 rounded-full border border-white/10 bg-[radial-gradient(circle_at_center,rgba(229,209,210,0.17),transparent_67%)]"
-          />
           <div className="relative z-10 flex justify-end">
             <button
               type="button"
               aria-label="Close menu"
               onClick={() => setIsOpen(false)}
-              className="grid size-12 place-items-center rounded-full border border-white/25 text-[var(--mist)] transition-colors hover:border-[var(--champagne)] hover:text-[var(--champagne)] focus-visible:ring-[var(--champagne)] focus-visible:ring-offset-[var(--wine)]"
+              className="grid size-12 place-items-center text-[var(--mist)] transition-[color,transform] duration-300 hover:scale-110 hover:text-[var(--champagne)] focus-visible:ring-[var(--champagne)] focus-visible:ring-offset-[var(--wine)]"
             >
               <X aria-hidden="true" />
             </button>

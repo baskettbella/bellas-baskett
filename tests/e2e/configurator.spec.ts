@@ -60,6 +60,9 @@ test('mobile menu fills the viewport and closes from its controls', async ({
   await page.getByRole('button', { name: 'Open menu' }).click();
 
   const menu = page.getByRole('dialog', { name: 'Site menu' });
+  await menu.evaluate((element) =>
+    Promise.all(element.getAnimations().map((animation) => animation.finished)),
+  );
   const bounds = await menu.boundingBox();
   expect(bounds).not.toBeNull();
   expect(bounds?.x).toBeLessThanOrEqual(1);
@@ -80,7 +83,8 @@ test('mobile menu centers its compact links and closes after a swipe', async ({
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/journal');
-  await page.getByRole('button', { name: 'Open menu' }).click();
+  const trigger = page.getByRole('button', { name: 'Open menu' });
+  await trigger.click();
 
   const menu = page.getByRole('dialog', { name: 'Site menu' });
   const navigation = menu.getByRole('navigation', {
@@ -128,6 +132,44 @@ test('mobile menu keeps its action visible on a compact phone viewport', async (
   await expect(menu.getByText('Swipe to close')).toBeInViewport({ ratio: 1 });
 });
 
+test('mobile menu rises smoothly from below the viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/journal');
+  await page.getByRole('button', { name: 'Open menu' }).click();
+
+  const firstTransform = await page
+    .getByRole('dialog', { name: 'Site menu' })
+    .evaluate((menu) => {
+      const animation = menu.getAnimations()[0];
+      if (!(animation?.effect instanceof KeyframeEffect)) return '';
+      return String(animation.effect.getKeyframes()[0]?.transform ?? '');
+    });
+
+  expect(firstTransform).toContain('translateY(100%)');
+});
+
+test('mobile menu has a translucent clean backdrop and bare close icon', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/journal');
+  const trigger = page.locator('button[aria-controls="mobile-menu"]');
+  await trigger.click();
+
+  const menu = page.getByRole('dialog', { name: 'Site menu' });
+  const backgroundColor = await menu.evaluate(
+    (element) => getComputedStyle(element).backgroundColor,
+  );
+  const closeBorderWidth = await menu
+    .getByRole('button', { name: 'Close menu' })
+    .evaluate((element) => getComputedStyle(element).borderTopWidth);
+
+  expect(backgroundColor).toMatch(/(?:\/|,)\s*0\.6\)?$/);
+  await expect(trigger).toHaveCSS('visibility', 'hidden');
+  await expect(menu.locator(':scope > div[aria-hidden="true"]')).toHaveCount(0);
+  expect(closeBorderWidth).toBe('0px');
+});
+
 test.describe('native touch navigation', () => {
   test.use({ hasTouch: true });
 
@@ -137,6 +179,11 @@ test.describe('native touch navigation', () => {
     await page.getByRole('button', { name: 'Open menu' }).click();
 
     const menu = page.getByRole('dialog', { name: 'Site menu' });
+    await menu.evaluate((element) =>
+      Promise.all(
+        element.getAnimations().map((animation) => animation.finished),
+      ),
+    );
     const session = await page.context().newCDPSession(page);
     await session.send('Input.dispatchTouchEvent', {
       type: 'touchStart',
@@ -162,6 +209,11 @@ test.describe('native touch navigation', () => {
     await page.getByRole('button', { name: 'Open menu' }).click();
 
     const menu = page.getByRole('dialog', { name: 'Site menu' });
+    await menu.evaluate((element) =>
+      Promise.all(
+        element.getAnimations().map((animation) => animation.finished),
+      ),
+    );
     const session = await page.context().newCDPSession(page);
     await session.send('Input.dispatchTouchEvent', {
       type: 'touchStart',

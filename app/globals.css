@@ -142,7 +142,10 @@
   }
 
   .mobile-nav-screen {
-    animation: mobile-nav-reveal 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    background: color-mix(in srgb, var(--wine) 60%, transparent);
+    backdrop-filter: blur(1rem);
+    animation: mobile-nav-reveal 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity;
   }
 
   .eyebrow {
@@ -620,7 +623,7 @@
 @keyframes mobile-nav-reveal {
   from {
     opacity: 0;
-    transform: translateY(-1rem);
+    transform: translateY(100%);
   }
   to {
     opacity: 1;

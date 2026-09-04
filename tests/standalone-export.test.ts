@@ -60,9 +60,11 @@ describe('standalone website export', () => {
 
     trigger?.click();
     expect(menu).toHaveAttribute('open');
+    expect(trigger?.style.visibility).toBe('hidden');
 
     window.dispatchEvent(new Event('scroll'));
     expect(menu).not.toHaveAttribute('open');
+    expect(trigger?.style.visibility).toBe('');
 
     trigger?.click();
     expect(menu).toHaveAttribute('open');
